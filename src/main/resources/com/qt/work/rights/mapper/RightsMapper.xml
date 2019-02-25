@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qt.work.rights.mapper.RightsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.qt.work.rights.model.RightsModel">
+		<result column="id" property="id" />
+		<result column="role_code" property="role_code" />
+		<result column="menu_code" property="menu_code" />
+	</resultMap>
+	<!-- table all fields sql片段 -->
+	<sql id="Base_Column_List">
+		id, role_code, menu_code
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="role_code != null and role_code != ''">
+			and role_code = #{role_code}
+		</if>
+		<if test="menu_code != null and menu_code != ''">
+			and menu_code = #{menu_code}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		mis.rights(role_code,menu_code)value(#{role_code},#{menu_code})
+	</insert>
+
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List"></include>
+		from mis.rights
+		<include refid="Example_Where_Clause"></include>
+	</select>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from mis.rights where
+		role_code = #{role_code}
+	</delete>
+
+	<delete id="deleteModel" parameterType="Object">
+		delete from mis.rights
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+	<!-- 根据，修改记录 -->
+	<update id="update" parameterType="Object">
+		update mis.rights set
+		role_name
+		= #{role_name}
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update mis.rights set
+		<trim suffixOverrides=",">
+			<if test="name != null and name != '' ">
+				role_name = #{role_name},
+			</if>
+			<if test="pass != null and pass != '' ">
+				role_sex = #{role_sex},
+			</if>
+		</trim>
+		where role_code = #{role_code}
+	</update>
+
+	<!-- 根据查询 系统用户 -->
+	<select id="selectId" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.rights where role_code = #{role_code}
+	</select>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from mis.rights
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.rights
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+		<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.rights
+		<include refid="Example_Where_Clause" /> 
+		limit ${rowStart},${pageLimit}
+	</select>
+
+</mapper>

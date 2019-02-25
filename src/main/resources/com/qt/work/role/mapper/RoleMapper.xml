@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qt.work.role.mapper.RoleMapper">
+	<resultMap id="BaseResultMap"
+		type="com.qt.work.role.model.RoleModel">
+		<result column="id" property="id" />
+		<result column="role_code" property="role_code" />
+		<result column="role_name" property="role_name" />
+		<result column="role_sex" property="role_sex" />
+		<result column="role_age" property="role_age" />
+	</resultMap>
+	<!-- table all fields sql片段 -->
+	<sql id="Base_Column_List">
+		id, role_code, role_name, role_sex,role_age
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="role_code != null and role_code != ''">
+			and role_code = #{role_code}
+		</if>
+		<if test="role_name != null and role_name != ''">
+			and role_name = #{role_name}
+		</if>
+		<if test="role_sex != null and role_sex != ''">
+			and role_sex = #{role_sex}
+		</if>
+		<if test="role_age != null and role_age != ''">
+			and role_age = #{role_age}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		mis.role(role_code,role_name,role_sex,role_age)value(#{role_code},#{role_name},#{role_sex},#{role_age})
+	</insert>
+
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List"></include>
+		from mis.role
+		<include refid="Example_Where_Clause"></include>
+	</select>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from mis.role where
+		role_code = #{role_code}
+	</delete>
+
+	<delete id="deleteModel" parameterType="Object">
+		delete from mis.role
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+	<!-- 根据，修改记录 -->
+	<update id="update" parameterType="Object">
+		update mis.role set
+		role_name
+		= #{role_name}
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update mis.role set
+		<trim suffixOverrides=",">
+			<if test="name != null and name != '' ">
+				role_name = #{role_name},
+			</if>
+			<if test="pass != null and pass != '' ">
+				role_sex = #{role_sex},
+			</if>
+		</trim>
+		where role_code = #{role_code}
+	</update>
+
+	<!-- 根据查询 系统用户 -->
+	<select id="selectId" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.role where role_code = #{role_code}
+	</select>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from mis.role
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.role
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+		<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.role
+		<include refid="Example_Where_Clause" /> 
+		limit ${rowStart},${pageLimit}
+	</select>
+
+</mapper>

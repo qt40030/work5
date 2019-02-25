@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qt.work.user.mapper.UserMapper">
+	<resultMap id="BaseResultMap"
+		type="com.qt.work.user.model.UserModel">
+
+		<result column="user_code" property="user_code" />
+		<result column="user_pass" property="user_pass" />
+		<result column="user_name" property="user_name" />
+		<result column="role_code" property="role_code" />
+		<result column="parent_code" property="parent_code" />
+		<result column="role_name" property="role_name" />
+		<result column="role_sex" property="role_sex" />
+		<result column="role_age" property="role_age" />
+	</resultMap>
+	<!-- table all fields sql片段 -->
+	<sql id="Base_Column_List">
+		u.id, u.user_code, u.user_pass, u.user_name, u.role_code, u.parent_code
+		,(select role_name from mis.role as r where r.role_code=u.role_code)role_age
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="user_code != null and user_code != ''">
+			and user_code = #{user_code}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and user_name = #{user_name}
+		</if>
+		<if test="user_pass != null and user_pass != ''">
+			and user_pass = #{user_pass}
+		</if>
+		<if test="role_code != null and role_code != ''">
+			and role_code = #{role_code}
+		</if>
+		<if test="parent_code != null and parent_code != ''">
+			and parent_code = #{parent_code}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		mis.user(user_code,user_name,user_pass,role_code,parent_code)value(#{user_code},#{user_name},#{user_pass},#{role_code},#{parent_code})
+	</insert>
+
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List"></include>
+		from mis.user as u
+		<include refid="Example_Where_Clause"></include>
+	</select>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from mis.user where
+		user_code = #{user_code}
+	</delete>
+
+	<delete id="deleteModel" parameterType="Object">
+		delete from mis.user
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+	<!-- 根据，修改记录 -->
+	<update id="update" parameterType="Object">
+		update mis.user set user_name=#{user_name}, user_pass = #{user_pass}
+		where user_code = #{user_code}
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update mis.user set
+		<trim suffixOverrides=",">
+			<if test="user_name != null and user_name != '' ">
+				user_name = #{user_name},
+			</if>
+			<if test="user_pass != null and user_pass != '' ">
+				user_pass = #{user_pass},
+			</if>
+		</trim>
+		where user_code = #{user_code}
+	</update>
+
+	<!-- 根据查询 系统用户 -->
+	<select id="selectId" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.user as u where user_code = #{user_code}
+	</select>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from mis.user
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.user as u
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+		<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.user as u
+		<include refid="Example_Where_Clause" /> 
+		limit ${rowStart},${pageLimit}
+	</select>
+	
+		<select id="selectList" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		FROM mis.user as u left join mis.role as r on u.role_code = r.role_code
+		<include refid="Example_Where_Clause" />
+	</select>
+
+
+</mapper>

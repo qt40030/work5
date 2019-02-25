@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qt.work.order.mapper.OrderMapper">
+	<resultMap id="BaseResultMap"
+		type="com.qt.work.order.model.OrderModel">
+		<result column="id" property="id" />
+		<result column="user_code" property="user_code" />
+		<result column="cust_code" property="cust_code" />
+	    <result column="goods_code" property="goods_code" />
+	    <result column="count" property="count" />
+	    <result column="time" property="time" />
+	    <result column="status" property="status" />
+	    	    <result column="ordercode" property="ordercode" />
+	</resultMap>
+	<!-- table all fields sql片段 -->
+	<sql id="Base_Column_List">
+		id, user_code, cust_code, goods_code, count, time, status, ordercode
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="user_code != null and user_code != ''">
+			and user_code = #{user_code}
+		</if>
+		<if test="cust_code != null and cust_code != ''">
+			and cust_code = #{cust_code}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="ordercode != null and ordercode != ''">
+			and ordercode = #{ordercode}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		mis.order(user_code,cust_code,goods_code,count,time,status,ordercode)value(#{user_code},#{cust_code},#{goods_code},#{count},#{time},#{status},#{ordercode})
+	</insert>
+
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List"></include>
+		from mis.order
+		<include refid="Example_Where_Clause"></include>
+	</select>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from mis.order where
+		id = #{id}
+	</delete>
+
+	<delete id="deleteModel" parameterType="Object">
+		delete from mis.order
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+	<!-- 根据，修改记录 -->
+	<update id="update" parameterType="Object">
+		update mis.order set
+		id
+		= #{id}
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update mis.order set
+		<trim suffixOverrides=",">
+			<if test="goods_code != null and goods_code != '' ">
+				goods_code = #{goods_code},
+			</if>
+			<if test="count != null and count != '' ">
+				count = #{count},
+			</if>
+			<if test="status != null and status != '' ">
+				status = #{status},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<!-- 根据查询 系统用户 -->
+	<select id="selectId" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.order where user_code = #{user_code}
+	</select>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from mis.order
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.order
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+		<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.order
+		<include refid="Example_Where_Clause" /> 
+		limit ${rowStart},${pageLimit}
+	</select>
+
+</mapper>

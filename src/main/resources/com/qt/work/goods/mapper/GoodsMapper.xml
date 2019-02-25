@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qt.work.goods.mapper.GoodsMapper">
+	<resultMap id="BaseResultMap"
+		type="com.qt.work.goods.model.GoodsModel">
+		<result column="id" property="id" />
+		<result column="goods_code" property="goods_code" />
+		<result column="goods_name" property="goods_name" />
+	    <result column="goods_sum" property="goods_sum" />
+		<result column="goods_cost" property="goods_cost" />
+	</resultMap>
+	<!-- table all fields sql片段 -->
+	<sql id="Base_Column_List">
+		id, goods_code, goods_name, goods_sum, goods_cost
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="goods_code != null and goods_code != ''">
+			and goods_code = #{goods_code}
+		</if>
+		<if test="goods_name != null and goods_name != ''">
+			and goods_name = #{goods_name}
+		</if>
+	</sql>
+
+	<insert id="insert" parameterType="Object">
+		insert into
+		mis.goods(goods_code,goods_name,goods_sum,goods_cost)value(#{goods_code},#{goods_name},#{goods_sum},#{goods_cost})
+	</insert>
+
+	<select id="select" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List"></include>
+		from mis.goods
+		<include refid="Example_Where_Clause"></include>
+	</select>
+
+	<!-- 删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from mis.goods where
+		goods_code = #{goods_code}
+	</delete>
+
+	<delete id="deleteModel" parameterType="Object">
+		delete from mis.goods
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+	<!-- 根据，修改记录 -->
+	<update id="update" parameterType="Object">
+		update mis.goods set
+		goods_code
+		= #{goods_code}
+	</update>
+	<!-- 修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update mis.goods set
+		<trim suffixOverrides=",">
+			<if test="goods_name != null and goods_name != '' ">
+				goods_name = #{goods_name},
+			</if>
+			<if test="goods_sum != null and goods_sum != '' ">
+				goods_sum = #{goods_sum},
+			</if>
+			<if test="goods_cost != null and goods_cost != '' ">
+				goods_cost = #{goods_cost},
+			</if>
+		</trim>
+		where goods_code = #{goods_code}
+	</update>
+
+	<!-- 根据查询 系统用户 -->
+	<select id="selectId" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.rights where goods_code = #{goods_code}
+	</select>
+
+	<!-- 系统用户 列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from mis.goods
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.goods
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 查询系统用户列表 -->
+		<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from mis.goods
+		<include refid="Example_Where_Clause" /> 
+		limit ${rowStart},${pageLimit}
+	</select>
+
+</mapper>

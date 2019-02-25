@@ -1,0 +1,39 @@
+
+mybatis:
+  mapperLocations: classpath:mapper/**/*.xml
+  typeAliasesPackage: com.example.model
+server:
+  port: 8080
+  servlet:
+    context-path: /work5
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 123456
+    url: jdbc:mysql://localhost:3306/store?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Hongkong
+    username: root
+  mail:
+   host: smtp.qq.com
+   password: ecvdykyhxscpjibb
+   port: 465
+   username: 1175940030@qq.com
+   protocol: smtp
+   properties.mail.smtp.auth: true
+   properties.mail.smtp.ssl.enable: true
+  mvc:
+    view:
+      prefix: /WEB-INF/web/
+      suffix: .jsp
+
+
+
+
+
+logging:
+  level:
+    com.qt.work.user.mapper : debug
+    com.qt.work.menu.mapper : debug
+    com.qt.work.rights.mapper : debug
+    com.qt.work.goods.mapper : debug
+ 
+      
